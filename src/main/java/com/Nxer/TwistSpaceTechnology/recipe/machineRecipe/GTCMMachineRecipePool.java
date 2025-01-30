@@ -120,7 +120,7 @@ import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gtPlusPlus.core.item.chemistry.RocketFuels.Liquid_Hydrogen;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.COMET_Cyclotron;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_AdvancedVacuum;
@@ -180,6 +180,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.ScanningWorkaround;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
@@ -192,7 +193,6 @@ import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
 import bartworks.system.material.WerkstoffLoader;
 import fox.spiteful.avaritia.items.LudicrousItems;
-import galaxyspace.core.register.GSItems;
 import ggfab.GGItemList;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
@@ -213,10 +213,12 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
-import gtPlusPlus.core.item.*;
-import gtPlusPlus.core.material.*;
+import gtPlusPlus.core.item.ModItems;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
-import gtPlusPlus.core.util.minecraft.*;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
@@ -419,7 +421,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade LuV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105))
-            .metadata(RESEARCH_TIME, 1 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(1 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105),
@@ -441,7 +443,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade ZPM
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106),
@@ -464,7 +466,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade UV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107),
@@ -486,7 +488,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade UHV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 11107),
@@ -515,7 +517,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade UEV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 11107),
@@ -546,7 +548,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade UIV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUEV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 SpaceWarper.get(1),
@@ -577,7 +579,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Upgrade UMV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, SpaceWarper.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 SpaceWarper.get(4),
@@ -676,7 +678,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // MiracleTop
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 12735))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 12735),
                 Component_Assembly_Line.get(64),
@@ -713,7 +715,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Coil.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 eM_Hollow.get(4),
                 SpaceWarper.get(8),
@@ -755,7 +757,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region MagneticDrivePressureFormer
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 ItemList.Casing_MiningOsmiridium.get(64),
                 Industrial_Extruder.get(64),
@@ -938,7 +940,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region HolySeparator
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.CuttingMachineUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 ItemList.CuttingMachineUHV.get(32),
@@ -997,7 +999,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region SpaceScaler
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, CompressorUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 CompressorUHV.get(64),
@@ -1032,7 +1034,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Containment_Field.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 eM_Containment_Field.get(4),
                 ItemList.Field_Generator_UIV.get(16),
@@ -1072,7 +1074,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region Molecule Deconstructor
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.ElectrolyzerUV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 ItemList.ElectrolyzerUV.get(64),
@@ -1107,7 +1109,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region CrystallineInfinitier
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.AutoclaveUHV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
                 eM_Containment_Field.get(4),
@@ -1147,7 +1149,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region Miracle Door
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Teleportation.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
             .itemInputs(
                 Mega_AlloyBlastSmelter.get(64),
                 Mega_AlloyBlastSmelter.get(64),
@@ -1196,7 +1198,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // eM_Teleportation blockCasingsTT 10
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_PlasmaForge.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
                 eM_Ultimate_Containment.get(4),
@@ -1231,7 +1233,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region Infinite Dynamo Hatch
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, tectech.thing.CustomItemList.eM_dynamoMulti64_UMV.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
             .itemInputs(
                 AnnihilationConstrainer.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
@@ -1263,7 +1265,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Ore_Processor.get(1))
-            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(16 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Ore_Processor.get(64),
@@ -1541,7 +1543,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, bioVat.copy())
-            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(16 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 64),
                 copyAmount(64, bioVat),
@@ -1655,7 +1657,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, megaMachines[1])
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
                 copyAmount(64, megaMachines[1]),
@@ -1730,7 +1732,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.DistilleryUV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackPlutonium, 64),
                 copyAmount(64, megaMachines[2]),
@@ -1812,7 +1814,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_Furnace.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 ItemList.Machine_Multi_Furnace.get(64),
                 ItemList.Casing_HeatProof.get(64),
@@ -1862,7 +1864,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
-            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(640 * HOURS))
             .itemInputs(
                 UXVTarget104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -1898,7 +1900,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVSource104.get(1))
-            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(640 * HOURS))
             .itemInputs(
                 UXVSource104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -2035,7 +2037,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
-                .metadata(RESEARCH_TIME, 114514 * 20)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(114514 * 20))
                 .itemInputs(
                     Machine_Multi_Computer.get(64),
                     Machine_Multi_Computer.get(64),
@@ -2144,7 +2146,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
-                .metadata(RESEARCH_TIME, 720000)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(720000))
                 .itemInputs(
                     copyAmount(64, quantumCard),
                     copyAmount(64, quantumCard),
@@ -2199,7 +2201,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.toolHeadDrill, Materials.Infinity, 1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
                 .itemInputs(
                     new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                     copyAmount(64, voidminer[2]),
@@ -2235,7 +2237,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.Machine_LV_Assembler.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
                 .itemInputs(
                     AssemblingMachineUHV.get(64),
                     ItemList.Field_Generator_UHV.get(16),
@@ -2268,7 +2270,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Industrial_Arc_Furnace.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
                 .itemInputs(
                     HighPowerRadiationProofCasing.get(64),
                     Industrial_Arc_Furnace.get(64),
@@ -2305,12 +2307,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Casing_Industrial_Arc_Furnace.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
                 .itemInputs(
                     Casing_Industrial_Arc_Furnace.get(8),
                     eM_Power.get(8),
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
-                    new ItemStack(GSItems.DysonSwarmItems, 64, 3),
+                    new ItemStack(IGItems.DysonSwarmItems, 64, 3),
 
                     TransmissionComponent_UV.get(16),
                     ItemList.Electric_Piston_UHV.get(8),
@@ -2412,7 +2414,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GregtechItemList.Casing_Coil_QuantumForceTransformer.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Longasssuperconductornameforuhvwire, 8),
                     GregtechItemList.Casing_Coil_QuantumForceTransformer.get(4),
@@ -2831,7 +2833,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, COMET_Cyclotron.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UEV.get(64),
                     COMET_Cyclotron.get(64),
@@ -2860,7 +2862,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTValues.RA
                     .stdBuilder()
                     .metadata(RESEARCH_ITEM, Casing_Cyclotron_External.get(1))
-                    .metadata(RESEARCH_TIME, 2 * HOURS)
+                    .metadata(SCANNING, ScanningWorkaround.fromLegacy(2 * HOURS))
                     .itemInputs(
                         Casing_Cyclotron_External.get(4),
                         Casing_AdvancedVacuum.get(4),
@@ -2884,7 +2886,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Casing_Cyclotron_Coil.get(1))
-                .metadata(RESEARCH_TIME, 4 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(4 * HOURS))
                 .itemInputs(
                     Casing_Cyclotron_Coil.get(16),
                     ItemList.Casing_Coil_Superconductor.get(4),
@@ -3005,7 +3007,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Controller_IndustrialRockBreaker.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UEV.get(4),
                     ItemList.RockBreakerZPM.get(16),
@@ -3044,7 +3046,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTValues.RA
                     .stdBuilder()
                     .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
-                    .metadata(RESEARCH_TIME, 24 * HOURS)
+                    .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
                     .itemInputs(
                         eM_Teleportation.get(64),
                         ItemList.Machine_Multi_PlasmaForge.get(64),
@@ -3130,7 +3132,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.MassFabricatorUMV.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 64),
                     Industrial_MassFab.get(64),
